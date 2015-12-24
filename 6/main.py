@@ -5,7 +5,7 @@ import re
 
 if __name__ == '__main__':
     width, height = 1000, 1000
-    lights = [False] * width * height
+    lights = [0] * width * height
 
     for line in fileinput.input():
         match = re.search(r'(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)', line)
@@ -20,14 +20,14 @@ if __name__ == '__main__':
         for y in range(y0, y1 + 1):
             for x in range(x0, x1 + 1):
                 if action == 'turn on':
-                    lights[y * width + x] = True
+                    lights[y * width + x] += 1
 
                 if action == 'turn off':
-                    lights[y * width + x] = False
+                    lights[y * width + x] = max(0, lights[y * width + x] - 1)
 
                 if action == 'toggle':
-                    lights[y * width + x] = not lights[y * width + x]
+                    lights[y * width + x] += 2
 
-    lit = len([light for light in lights if light])
+    brightness = sum(lights)
 
-    print('{} lights are lit'.format(lit))
+    print('The total brightness is {}'.format(brightness))
