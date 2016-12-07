@@ -13,6 +13,8 @@ if __name__ == '__main__':
     data = input()
     index = 0
     position = ( 0,  0)
+    positions = []
+    duplicates = []
 
     for instruction in data.split(', '):
         if instruction[0:1] == 'R':
@@ -23,10 +25,17 @@ if __name__ == '__main__':
             raise Exception('invalid rotation')
 
         length = int(instruction[1:])
-        direction = tuple(length * i for i in directions[index])
-        position = tuple(map(operator.add, position, direction))
+        for _ in range(0, length):
+            position = tuple(map(operator.add, position, directions[index]))
 
-        print('{:5} | {:15} | {:15}'.format(instruction, str(direction), str(position)))
+            if position in positions:
+                duplicates.append(position)
+            else:
+                positions.append(position)
+
+        print('{:5} | {:15}'.format(instruction, str(position)))
 
     print('Easter Bunny HQ Position: {}'.format(position))
     print('Easter Bunny HQ Distance: {}'.format(sum(abs(i) for i in position)))
+    print('Actual Easter Bunny HQ Position: {}'.format(duplicates[0]))
+    print('Actual Easter Bunny HQ Distance: {}'.format(sum(abs(i) for i in duplicates[0])))
