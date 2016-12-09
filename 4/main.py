@@ -15,12 +15,29 @@ if __name__ == '__main__':
         if not match:
             continue
 
-        counter = collections.Counter(x for x in match.group(1)[::] if x != '-')
+        encrypted_name = match.group(1)
+        sector_id = int(match.group(2))
+        checksum = match.group(3)
+
+        counter = collections.Counter(x for x in encrypted_name[::] if x != '-')
         letters = ''.join(item[0] for item in sorted(counter.most_common(), key=lambda item: (-item[1], item[0])))
 
-        if letters[0:5] == match.group(3):
-            sector_sum += int(match.group(2))
+        if letters[0:5] == checksum:
+            sector_sum += int(sector_id)
             real += 1
+
+            start = ord('a')
+            characters = []
+            for ch in encrypted_name:
+                if ch == '-':
+                    characters.append(' ')
+                else:
+                    characters.append(chr((ord(ch) - start + int(sector_id)) % 26 + start))
+
+            name = ''.join(characters)
+
+            if 'northpole object' in name:
+                print('Found "{}" in sector {} ({})'.format('northpole object', sector_id, name))
 
         total += 1
 
