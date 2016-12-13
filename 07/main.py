@@ -2,34 +2,46 @@
 import fileinput
 
 
+def is_abba(s):
+    if s[0] == s[1]:
+        return False
+
+    return s[0] == s[3] and s[1] == s[2]
+
+
+def check_tls(ip):
+    valid = False
+    subnet = False
+
+    for i in range(0, len(ip)):
+        if ip[i] == '[':
+            subnet = True
+            continue
+        elif ip[i] == ']':
+            subnet = False
+            continue
+
+        if len(ip[i:i+4]) != 4:
+            continue
+
+        if not is_abba(ip[i:i+4]):
+            continue
+
+        if subnet:
+            return False
+
+        valid = True
+
+    return valid
+
+
 if __name__ == '__main__':
-    count = 0
+    count_tls = 0
 
     for line in fileinput.input():
         line = line.strip()
 
-        tls = False
-        hypernet = False
-        for i in range(0, len(line) - 3):
-            if line[i] == '[':
-                hypernet = True
-                continue
-            elif line[i] == ']':
-                hypernet = False
-                continue
+        if check_tls(line):
+            count_tls += 1
 
-            found = False
-            if line[i + 0] != line[i + 1] and line[i + 0] == line[i + 3] and line[i + 1] == line[i + 2]:
-                found = True
-
-            if found:
-                tls = True
-
-            if hypernet and found:
-                tls = False
-                break
-
-        if tls:
-            count += 1
-
-    print('TLS Supported IPs: {}'.format(count))
+    print('TLS Supported IPs: {}'.format(count_tls))
