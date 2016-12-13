@@ -16,5 +16,5 @@ if __name__ == '__main__':
             counters[i][line[i]] += 1
 
 
-    message = ''.join(counter.most_common(1)[0][0] for counter in counters)
+    message = ''.join(counter.most_common()[-1][0] for counter in counters)
     print('Error Corrected Message: {}'.format(message))
