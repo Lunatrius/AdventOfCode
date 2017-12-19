@@ -2,17 +2,25 @@
 import fileinput
 
 
+def get_row_checksum(numbers):
+    for i in range(0, len(numbers)):
+        for j in range(i + 1, len(numbers)):
+            if numbers[i] % numbers[j] == 0:
+                return (numbers[i], numbers[j], int(numbers[i] / numbers[j]))
+
+    return (None, None, None)
+
+
 if __name__ == '__main__':
     checksum = 0
 
     for line in fileinput.input():
         line = line.strip()
 
-        numbers = [int(token) for token in line.split('\t')]
+        numbers = list(reversed(sorted([int(token) for token in line.split('\t')])))
 
-        high = max(numbers)
-        low = min(numbers)
+        a, b, row_checksum = get_row_checksum(numbers)
 
-        checksum += high - low
+        checksum += row_checksum
 
     print(f'Spreadsheet checksum: {checksum}')
