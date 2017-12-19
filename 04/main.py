@@ -17,3 +17,18 @@ if __name__ == '__main__':
         total += 1
 
     print(f'Valid passphrases: {valid} / {total}')
+
+    valid = 0
+    total = 0
+
+    for line in fileinput.input():
+        line = line.strip()
+
+        tokens = [''.join(sorted(token)) for token in line.split(' ')]
+
+        if len(set(tokens)) == len(tokens):
+            valid += 1
+
+        total += 1
+
+    print(f'Valid passphrases (new policy): {valid} / {total}')
