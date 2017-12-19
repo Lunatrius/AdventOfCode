@@ -49,3 +49,27 @@ if __name__ == '__main__':
 
         print(f'Location: {x} {y}')
         print(f'Steps to access port: {steps}')
+
+        data = {
+            (0, 0): 1
+        }
+
+        for pos in grid:
+            if pos in data:
+                continue
+
+            total = 0
+
+            for y in range(-1, 2):
+                for x in range(-1, 2):
+                    if x == 0 and y == 0:
+                        continue
+
+                    rpos = tuple(map(operator.add, pos, (x, y)))
+                    total += data.get(rpos, 0)
+
+            data[pos] = total
+
+            if total > position:
+                print(f'First larger value: {total}')
+                break
