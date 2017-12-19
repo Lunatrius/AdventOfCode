@@ -8,7 +8,8 @@ if __name__ == '__main__':
 
         total = 0
         for i in range(0, len(line)):
-            if line[i] == line[(i + 1) % len(line)]:
+            j = (i + int(len(line) / 2)) % len(line)
+            if line[i] == line[j]:
                 total += int(line[i])
 
         print(f'CAPTCHA result: {total}')
